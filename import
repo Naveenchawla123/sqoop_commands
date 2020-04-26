@@ -1,0 +1,28 @@
+-----------------------------------------------------------------------------------------------------------
+sqoop is used for import or export between RDBMS and HDFS or RDBMS and HIVE or  RDBMS and HBase
+-----------------------------------------------------------------------------------------------------------
+Import RDBMS to HDFS
+---------------------------------------------------------------------------------------------------------
+sqoop import --connect jdbc:mysql://localhost:XXXX/emp --username root --password xyz \
+             --table emp -m 2 --target-dir import01
+
+sqoop import --connect jdbc:mysql://localhost:XXXX/emp --username root --password xyz \
+             --table emp -m 2 where "sal >=5000 and sex ='m'" columns name , sal, sex --target-dir import01
+             
+sqoop import --connect jdbc:mysql://localhost:XXXX/emp --username root --password xyz \
+             --query "select *from emp where $CONDITIONS" -m 3 --target-dir import01             
+             
+--------------------------------------------------------------------------------------------------------
+Import RDBMS to HIVE
+--------------------------------------------------------------------------------------------------------
+sqoop import --connect jdbc:mysql://localhost:XXXX/emp --username root --password xyz 
+             --table emp -m 2 --hive-import --hive-tablename
+             
+if no table exist in hive then create it       
+
+hive> create table tablename(id int, name string, sal int, sex string) 
+      row format delimeted fields terminated by ','
+      
+sqoop import --connect jdbc:mysql://localhost:XXXX/emp --username root --password xyz 
+             --table emp -m 2 --hive-import --hive-tablename fields terminated by ','     
+ 
